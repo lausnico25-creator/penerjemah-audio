@@ -29,7 +29,7 @@ except Exception:
     st.error("API Key belum disetting di Secrets! Pastikan GEMINI_API_KEY sudah benar.")
     st.stop()
 
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 # --- FUNGSI PENDUKUNG ---
 def play_audio(text):
