@@ -107,7 +107,7 @@ else:
             Ini tahun kedua valentine kita yah wkwkwkwk. semoga kita tetep bersama terus ya, walaupun mungkin saat lulus kita berpisah dan mengejar mimpi kita masing-masing. Tapi aku akan tetap percaya sama kamu, semoga kita selalu bareng yah🥰
         </p>
         <p>
-            Jangan bosen bosen yah, tetap sabar menghadapi kelakuanku yang mungkin ngeselin hehe. wopyuu🤍🤍
+            Jangan bosen bosen yah, tetap sabar menghadapi kelakuanku yang mungkin ngeselin hehe😅 wopyuu🤍🤍
         </p>
         <p>
             Buat hadiah Valentine nya menyusul yahhh😅🫣MAAF TELATSSSSS🙏
