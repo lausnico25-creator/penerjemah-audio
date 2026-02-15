@@ -39,6 +39,18 @@ st.markdown("""
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         border-left: 8px solid #F06292;
         line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    /* CSS Tambahan untuk tombol tutup agar tetap di bawah dan terlihat */
+    .footer-button div.stButton > button {
+        position: static !important;
+        background-color: #F06292 !important;
+        color: white !important;
+        border-radius: 10px !important;
+        height: auto !important;
+        padding: 10px 20px !important;
+        top: 0 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -60,7 +72,7 @@ if not st.session_state.terbuka:
         else:
             st.markdown("<h1 style='text-align:center; font-size:100px;'>✈️</h1>", unsafe_allow_html=True)
 
-        # Tombol ini sekarang transparan dan menutupi area gambar
+        # Tombol transparan menutupi area gambar
         if st.button("BUKA"):
             st.session_state.terbuka = True
             st.rerun()
@@ -80,6 +92,7 @@ else:
     
     st.markdown("<h1 style='text-align:center;'>Happy Valentine's Day Sayang!! 💖</h1>", unsafe_allow_html=True)
     
+    # Kotak Surat
     st.markdown("""
     <div class="letter-box">
         <h3 style="margin-top:0;">Haloo my handsome, my love, my world! 🪐✨🤍</h3>
@@ -99,6 +112,9 @@ else:
     </div>
     """, unsafe_allow_html=True)
     
+    # Tombol Tutup diletakkan di bawah (menggunakan container khusus agar tidak transparan)
+    st.markdown('<div class="footer-button">', unsafe_allow_html=True)
     if st.button("Tutup Pesan 📩", key="tutup"):
         st.session_state.terbuka = False
         st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
