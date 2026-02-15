@@ -4,29 +4,26 @@ import os
 # 1. SETTING HALAMAN
 st.set_page_config(page_title="Pesan Untukmu 💌", page_icon="💖", layout="centered")
 
-# Fungsi untuk memutar musik Maliq & D'Essentials - Pilihanku
-def play_pilihanku():
-    # Link audio (Menggunakan sumber pihak ketiga yang mendukung pemutaran langsung)
-    # Catatan: Jika link ini mati, kamu bisa menggantinya dengan link .mp3 lainnya
-    audio_url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" # Placeholder audio
-    
-    # Teknik embed audio tersembunyi
-    audio_html = f"""
-        <iframe src="https://open.spotify.com/embed/track/6Uo7LzOnr86j6yS27U3V6K?utm_source=generator&autoplay=1" 
-        width="0" height="0" frameborder="0" allowfullscreen="" 
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-        loading="lazy"></iframe>
-    """
-    st.markdown(audio_html, unsafe_allow_html=True)
-    st.info("🎵 Mendengarkan: Maliq & D'Essentials - Pilihanku")
-
-# 2. CUSTOM CSS
+# 2. CUSTOM CSS (Teks Hitam & Perbaikan Visual)
 st.markdown("""
     <style>
     .stApp {
         background-color: #FCE4EC;
     }
     
+    /* Mengubah semua teks utama menjadi hitam agar jelas */
+    .title-text {
+        text-align: center;
+        color: #000000 !important; /* Hitam Pekat */
+        font-family: 'Comic Sans MS', cursive;
+        font-weight: bold;
+    }
+
+    p, span, label {
+        color: #000000 !important; /* Hitam Pekat */
+    }
+
+    /* Tombol transparan agar gambar bisa diklik */
     div.stButton > button {
         background: none;
         border: none;
@@ -39,24 +36,24 @@ st.markdown("""
     div.stButton > button:hover {
         transform: scale(1.1) rotate(-5deg);
         background: none;
-        border: none;
     }
 
+    /* Kotak Surat dengan Teks Hitam */
     .letter-box {
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.9);
         padding: 30px;
         border-radius: 20px;
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         border-left: 8px solid #F06292;
         font-family: 'Comic Sans MS', cursive;
-        color: #444;
+        color: #000000 !important; /* Teks dalam surat jadi hitam */
         line-height: 1.6;
+        animation: fadeIn 1.2s;
     }
 
-    .title-text {
-        text-align: center;
-        color: #D81B60;
-        font-family: 'Comic Sans MS', cursive;
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     </style>
     """, unsafe_allow_html=True)
@@ -65,11 +62,11 @@ st.markdown("""
 if 'terbuka' not in st.session_state:
     st.session_state.terbuka = False
 
-# --- BAGIAN 1: TOMBOL PESAWAT ---
+# --- BAGIAN 1: TAMPILAN PESAWAT ---
 if not st.session_state.terbuka:
     st.markdown("<br><br><br>", unsafe_allow_html=True)
     st.markdown("<h2 class='title-text'>Ada pesan special untukmu...</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center; color: #AD1457;'>Klik pesawatnya untuk menerbangkan pesan</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center;'>Klik pesawatnya untuk menerbangkan pesan</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([0.5, 2, 0.5])
     with col2:
@@ -82,19 +79,27 @@ if not st.session_state.terbuka:
             st.session_state.terbuka = True
             st.rerun()
 
-# --- BAGIAN 2: SURAT & LAGU ---
+# --- BAGIAN 2: TAMPILAN SURAT & LAGU ---
 else:
-    # Memutar Lagu "Pilihanku" saat surat terbuka
-    play_pilihanku()
+    # LAGU: Maliq & D'Essentials - Pilihanku
+    # Menggunakan Embed Player yang lebih kompatibel dengan browser mobile
+    st.markdown("""
+        <iframe style="border-radius:12px" 
+        src="https://open.spotify.com/embed/track/6XybtFpQ8pW2593fW8Hclp?utm_source=generator&autoplay=1" 
+        width="100%" height="80" frameBorder="0" allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+        </iframe>
+        <p style='text-align:center; font-size: 12px; color: black;'>NB: Jika lagu tidak berbunyi otomatis, klik tombol Play pada pemutar di atas.</p>
+    """, unsafe_allow_html=True)
     
-    # Efek Balon Hati
     st.balloons()
     
     st.markdown("<h1 class='title-text'>Happy Valentine's Day Sayang!! 💖</h1>", unsafe_allow_html=True)
     
+    # Isi Surat (Semua Teks Hitam)
     st.markdown("""
     <div class="letter-box">
-        <h3 style="color: #D81B60;">Haloo my handsome, my love, my world! 🪐✨🤍</h3>
+        <h3 style="color: #000000; margin-top:0;">Haloo my handsome, my love, my world! 🪐✨🤍</h3>
         <p>
             Di hari yang penuh cinta ini, aku mau bilang aku sangat amat bersyukur 
             bisa terus bersama kamu. Terima kasih banyak untuk semua yang kita lewatin bareng.
@@ -105,7 +110,7 @@ else:
         </p>
         <p>
             Aku harap cinta kita selalu bertumbuh setiap harinya, dan rasa sayang ini 
-            nggak akan pernah habiss...
+            nggak akan pernah habis...
         </p>
         <p style="text-align: right; font-weight: bold; font-size: 1.2em;">- Sayangmu ❤️</p>
     </div>
