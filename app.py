@@ -76,7 +76,7 @@ if not st.session_state.terbuka:
         else:
             st.markdown("<h1 style='text-align:center; font-size:100px;'>✈️</h1>", unsafe_allow_html=True)
 
-        if st.button("BUKA"):
+        if st.button("Pencet untuk membuka surat🥰"):
             st.session_state.terbuka = True
             st.rerun()
 
