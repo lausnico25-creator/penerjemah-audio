@@ -67,7 +67,7 @@ if 'terbuka' not in st.session_state:
 if not st.session_state.terbuka:
     st.markdown("<br><br><br>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align:center;'>Ada pesan special untukmu...</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center;'>Klik pada pesawat untuk membukanya ✨</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center;'>Klik tombol dibawah pesawat✨</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([0.2, 1, 0.2])
     with col2:
@@ -98,20 +98,18 @@ else:
     # KOTAK SURAT (Tanpa tombol di dalamnya)
     st.markdown("""
     <div class="letter-box">
-        <h3 style="margin-top:0;">Haloo my handsome, my love, my world! 🪐✨🤍</h3>
+        <h3 style="margin-top:0;">Haloo my pretty girl, my love, my world! 🪐✨🤍</h3>
         <p>
             Di hari yang penuh cinta ini, aku mau bilang aku sangat amat bersyukur 
             bisa terus bersama kamu. Terima kasih banyak untuk semua yang kita lewatin bareng.
         </p>
         <p>
-            Tahun ini jadi tahun pertama kita ngerayain valentine, semoga di tahun-tahun 
-            berikutnya kita tetap bisa ngerayain valentine terus yaaa.
+            Ini tahun kedua valentine kita yah wkwkwkwk. semoga kita tetep bersama terus ya, walaupun mungkin saat lulus kita berpisah dan mengejar mimpi kita masing-masing. Tapi aku akan tetap percaya sama kamu, semoga kita selalu bareng yah🥰
         </p>
         <p>
-            Aku harap cinta kita selalu bertumbuh setiap harinya, dan rasa sayang ini 
-            nggak akan pernah habis...
+            Jangan bosen bosen yah, tetap sabar menghadapi kelakuanku yang mungkin ngeselin hehe. wopyuu🤍🤍
         </p>
-        <p style="text-align: right; font-weight: bold; font-size: 1.2em; margin-bottom:0;">- Sayangmu ❤️</p>
+        <p style="text-align: right; font-weight: bold; font-size: 1.2em; margin-bottom:0;">- Sayangmu, Niko🤍</p>
     </div>
     """, unsafe_allow_html=True)
     
