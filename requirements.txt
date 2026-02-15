@@ -1,4 +1,1 @@
-
 streamlit==1.31.0
-# Jika ingin confetti hati yang lebih spesifik, kamu bisa coba pustaka seperti streamlit_lottie
-# tapi untuk saat ini, st.balloons() sudah cukup representatif
