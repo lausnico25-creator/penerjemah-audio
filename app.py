@@ -1,79 +1,97 @@
 import streamlit as st
-import time
 
 # Pengaturan halaman
-st.set_page_config(page_title="Happy Valentine!", page_icon="💖", layout="centered")
+st.set_page_config(page_title="Pesan Untukmu", page_icon="💌", layout="centered")
 
-# Custom CSS untuk background pink dan styling teks
+# Custom CSS untuk tampilan estetik
 st.markdown("""
     <style>
     .main {
-        background-color: #FCE4EC;
+        background-color: #FFF0F5;
     }
     .stButton>button {
-        background-color: #f06292;
-        color: white;
-        border-radius: 20px;
+        background: none;
         border: none;
-        padding: 10px 25px;
+        font-size: 80px;
+        transition: transform 0.3s;
+        cursor: pointer;
     }
     .stButton>button:hover {
-        background-color: #ec407a;
-        color: white;
+        transform: scale(1.2) rotate(-10deg);
+        background: none;
+        border: none;
     }
-    .big-text {
-        font-family: 'Comic Sans MS', cursive;
-        color: #d81b60;
+    .paper-plane-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+    }
+    .letter-box {
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-left: 5px solid #FF69B4;
+        font-family: 'serif';
+        color: #444;
+        line-height: 1.6;
+    }
+    .title-text {
         text-align: center;
+        color: #D81B60;
+        font-family: 'cursive';
     }
     </style>
     """, unsafe_allow_html=True)
 
-# Inisialisasi state untuk alur cerita
-if 'step' not in st.session_state:
-    st.session_state.step = 0
+# Inisialisasi state
+if 'buka_surat' not in st.session_state:
+    st.session_state.buka_surat = False
 
-def next_step():
-    st.session_state.step += 1
+def open_letter():
+    st.session_state.buka_surat = True
 
-# --- ALUR CERITA ---
+# --- TAMPILAN UTAMA ---
 
-if st.session_state.step == 0:
-    st.markdown("<h1 class='big-text'>Happy Valentine's Day Sayang!! 💖</h1>", unsafe_allow_html=True)
-    st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIybmt6am44eHF3eXl1bmxwaW5mZGN6Znd4eXp5eHF6eHF6eHF6ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/vNEXy33u93wV39Hh0K/giphy.gif", use_column_width=True)
-    st.write("there's more waiting... click to find out ✨")
-    if st.button("tap <3"):
-        next_step()
-        st.rerun()
-
-elif st.session_state.step == 1:
-    st.markdown("<h3 class='big-text'>Terima kasih telah hadir dan selalu mengisi hari-hariku penuh cinta 🥺💖</h3>", unsafe_allow_html=True)
-    st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnd4eXp5eHF6eHF6eHF6ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9NmJpL19w4/giphy.gif")
-    if st.button("open it <3"):
-        next_step()
-        st.rerun()
-
-elif st.session_state.step == 2:
-    st.markdown("<h3 class='big-text'>Remember that everytime I look at you, I fall in love all over again</h3>", unsafe_allow_html=True)
-    st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnd4eXp5eHF6eHF6eHF6ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/KztT2c4u8mYYUiCiS7/giphy.gif")
-    if st.button("next..."):
-        next_step()
-        st.rerun()
-
-elif st.session_state.step == 3:
-    st.balloons() # Efek balon saat sampai di pesan utama
-    st.markdown("<h2 class='big-text'>I still want u to be my partner forever together 🥺</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center;'>Tahun ini jadi tahun pertama kita ngerayain valentine, semoga tahun berikutnya tetap bareng ya!</p>", unsafe_allow_html=True)
+if not st.session_state.buka_surat:
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<h2 class='title-text'>Ada surat untukmu...</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; color: #888;'>Klik pesawatnya untuk membuka</p>", unsafe_allow_html=True)
     
-    # Menampilkan pesan panjang seperti di video
-    pesan_cinta = """
-    Haloo my handsome, my love, my world! 🪐✨🤍
-    Di hari yang penuh cinta ini, aku mau bilang aku sangat amat bersyukur bisa terus bersama kamu. 
-    Terima kasih banyak untuk semua yang kita lewatin bareng. 
-    Semoga kita selalu bertumbuh setiap harinya dan rasa sayang ini nggak akan pernah habis...
-    """
-    st.info(pesan_cinta)
+    # Kolom untuk menengahkan tombol
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        if st.button("✈️"): # Menggunakan emoji agar aman tidak akan 'Not Available'
+            open_letter()
+            st.rerun()
+
+else:
+    # Efek perayaan saat surat dibuka
+    st.balloons()
     
-    if st.button("Mulai Lagi?"):
-        st.session_state.step = 0
+    st.markdown("<h2 class='title-text'>Happy Valentine's Day Sayang!! 💖</h2>", unsafe_allow_html=True)
+    
+    # Kotak Surat
+    st.markdown("""
+    <div class="letter-box">
+        <h4>Haloo my handsome, my love, my world! 🪐✨</h4>
+        <p>
+            Di hari yang penuh cinta ini, aku mau bilang aku sangat amat bersyukur 
+            bisa terus bersama kamu. Terima kasih banyak untuk semua yang kita lewatin bareng.
+        </p>
+        <p>
+            Tahun ini jadi tahun pertama kita ngerayain valentine, semoga di tahun-tahun 
+            berikutnya kita tetap bisa ngerayain bareng terus yaaa.
+        </p>
+        <p>
+            Aku harap cinta kita selalu bertumbuh setiap harinya, dan rasa sayang ini 
+            nggak akan pernah habiss...
+        </p>
+        <p style="text-align: right; font-weight: bold;">- Sayangmu 🤍</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Tutup Surat"):
+        st.session_state.buka_surat = False
         st.rerun()
