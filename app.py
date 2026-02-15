@@ -1,155 +1,79 @@
 import streamlit as st
-import google.generativeai as genai
-from gtts import gTTS
-import sqlite3
-import io
-import re
-from datetime import datetime
+import time
 
-# --- KONFIGURASI HALAMAN ---
-st.set_page_config(page_title="Tutor Korea-Indo AI", page_icon="🇰🇷", layout="wide")
+# Pengaturan halaman
+st.set_page_config(page_title="Happy Valentine!", page_icon="💖", layout="centered")
 
-# --- DATABASE SETUP ---
-def init_db():
-    conn = sqlite3.connect('database_korea.db', check_same_thread=False)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS sessions 
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, created_at TEXT)''')
-    c.execute('''CREATE TABLE IF NOT EXISTS messages 
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT, session_id INTEGER, role TEXT, content TEXT)''')
-    conn.commit()
-    return conn
+# Custom CSS untuk background pink dan styling teks
+st.markdown("""
+    <style>
+    .main {
+        background-color: #FCE4EC;
+    }
+    .stButton>button {
+        background-color: #f06292;
+        color: white;
+        border-radius: 20px;
+        border: none;
+        padding: 10px 25px;
+    }
+    .stButton>button:hover {
+        background-color: #ec407a;
+        color: white;
+    }
+    .big-text {
+        font-family: 'Comic Sans MS', cursive;
+        color: #d81b60;
+        text-align: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-conn = init_db()
+# Inisialisasi state untuk alur cerita
+if 'step' not in st.session_state:
+    st.session_state.step = 0
 
-# --- KONFIGURASI API ---
-try:
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-except Exception:
-    st.error("API Key belum disetting di Secrets! Pastikan GEMINI_API_KEY sudah benar.")
-    st.stop()
+def next_step():
+    st.session_state.step += 1
 
-model = genai.GenerativeModel("gemini-2.5-flash")
+# --- ALUR CERITA ---
 
-# --- FUNGSI PENDUKUNG ---
-def play_audio(text):
-    """Mengubah teks menjadi audio MP3."""
-    try:
-        tts = gTTS(text=text, lang='ko')
-        fp = io.BytesIO()
-        tts.write_to_fp(fp)
-        fp.seek(0)
-        return fp
-    except Exception:
-        return None
-
-def extract_hangeul(text):
-    """Mengambil karakter Hangeul saja dari sebuah teks."""
-    # Regex untuk mendeteksi karakter Hangeul
-    hangeul_pattern = re.compile(r'[\uac00-\ud7af]+')
-    matches = hangeul_pattern.findall(text)
-    return " ".join(matches) if matches else text
-
-# --- SIDEBAR: RIWAYAT CHAT ---
-with st.sidebar:
-    st.title("🇰🇷 Riwayat Belajar")
-    
-    if st.button("+ Chat Baru", use_container_width=True):
-        now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        c = conn.cursor()
-        c.execute("INSERT INTO sessions (title, created_at) VALUES (?, ?)", ("Percakapan Baru", now))
-        conn.commit()
-        st.session_state.current_session_id = c.lastrowid
+if st.session_state.step == 0:
+    st.markdown("<h1 class='big-text'>Happy Valentine's Day Sayang!! 💖</h1>", unsafe_allow_html=True)
+    st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIybmt6am44eHF3eXl1bmxwaW5mZGN6Znd4eXp5eHF6eHF6eHF6ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/vNEXy33u93wV39Hh0K/giphy.gif", use_column_width=True)
+    st.write("there's more waiting... click to find out ✨")
+    if st.button("tap <3"):
+        next_step()
         st.rerun()
 
-    st.write("---")
-    c = conn.cursor()
-    c.execute("SELECT id, title FROM sessions ORDER BY id DESC")
-    sessions = c.fetchall()
+elif st.session_state.step == 1:
+    st.markdown("<h3 class='big-text'>Terima kasih telah hadir dan selalu mengisi hari-hariku penuh cinta 🥺💖</h3>", unsafe_allow_html=True)
+    st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnd4eXp5eHF6eHF6eHF6ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9NmJpL19w4/giphy.gif")
+    if st.button("open it <3"):
+        next_step()
+        st.rerun()
+
+elif st.session_state.step == 2:
+    st.markdown("<h3 class='big-text'>Remember that everytime I look at you, I fall in love all over again</h3>", unsafe_allow_html=True)
+    st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnd4eXp5eHF6eHF6eHF6ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/KztT2c4u8mYYUiCiS7/giphy.gif")
+    if st.button("next..."):
+        next_step()
+        st.rerun()
+
+elif st.session_state.step == 3:
+    st.balloons() # Efek balon saat sampai di pesan utama
+    st.markdown("<h2 class='big-text'>I still want u to be my partner forever together 🥺</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center;'>Tahun ini jadi tahun pertama kita ngerayain valentine, semoga tahun berikutnya tetap bareng ya!</p>", unsafe_allow_html=True)
     
-    for s_id, s_title in sessions:
-        # Menandai chat yang sedang aktif
-        label = f"📖 {s_title}" if "current_session_id" in st.session_state and st.session_state.current_session_id == s_id else f"📄 {s_title}"
-        if st.button(label, key=f"s_{s_id}", use_container_width=True):
-            st.session_state.current_session_id = s_id
-            st.rerun()
-
-# --- LOGIKA SESI AWAL ---
-if "current_session_id" not in st.session_state:
-    if sessions:
-        st.session_state.current_session_id = sessions[0][0]
-    else:
-        now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        c = conn.cursor()
-        c.execute("INSERT INTO sessions (title, created_at) VALUES (?, ?)", ("Percakapan Baru", now))
-        conn.commit()
-        st.session_state.current_session_id = c.lastrowid
-
-# --- TAMPILAN UTAMA ---
-st.title("🎓 Guru Bahasa Korea AI")
-st.info("Ketik kalimat dalam Bahasa Indonesia, dan saya akan menerjemahkannya ke Bahasa Korea beserta cara bacanya.")
-
-# Ambil history dari DB
-c = conn.cursor()
-c.execute("SELECT id, role, content FROM messages WHERE session_id = ? ORDER BY id ASC", (st.session_state.current_session_id,))
-current_messages = c.fetchall()
-
-# Menampilkan chat
-for m_id, role, content in current_messages:
-    with st.chat_message(role):
-        st.markdown(content)
-        
-        # Fitur Audio pada jawaban Assistant
-        if role == "assistant":
-            # Ambil hanya bagian Hangeul agar suara gTTS akurat
-            korean_text = extract_hangeul(content)
-            if korean_text:
-                if st.button(f"🔊 Dengar Pengucapan", key=f"audio_{m_id}"):
-                    audio_fp = play_audio(korean_text)
-                    if audio_fp:
-                        st.audio(audio_fp, format="audio/mp3")
-
-# --- INPUT USER ---
-if prompt := st.chat_input("Tanya guru..."):
-    # 1. Tampilkan dan simpan pesan user
-    with st.chat_message("user"):
-        st.markdown(prompt)
+    # Menampilkan pesan panjang seperti di video
+    pesan_cinta = """
+    Haloo my handsome, my love, my world! 🪐✨🤍
+    Di hari yang penuh cinta ini, aku mau bilang aku sangat amat bersyukur bisa terus bersama kamu. 
+    Terima kasih banyak untuk semua yang kita lewatin bareng. 
+    Semoga kita selalu bertumbuh setiap harinya dan rasa sayang ini nggak akan pernah habis...
+    """
+    st.info(pesan_cinta)
     
-    c.execute("INSERT INTO messages (session_id, role, content) VALUES (?, ?, ?)", 
-              (st.session_state.current_session_id, "user", prompt))
-    conn.commit()
-
-    # 2. Respon Assistant
-    with st.chat_message("assistant"):
-        with st.spinner("Guru sedang berpikir..."):
-            try:
-                # Instruksi sistem
-                instruction = (
-                    "Kamu adalah Guru Bahasa Korea yang ramah. Terjemahkan input siswa ke Bahasa Korea. "
-                    "Format jawaban: \n1. Teks Hangeul\n2. Cara baca (Romanisasi)\n3. Penjelasan singkat dalam Bahasa Indonesia."
-                )
-                
-                # Memanggil API Gemini
-                response = model.generate_content(f"{instruction}\n\nSiswa: {prompt}")
-                answer = response.text
-                
-                # Update Judul otomatis jika masih default
-                c.execute("SELECT title FROM sessions WHERE id = ?", (st.session_state.current_session_id,))
-                if c.fetchone()[0] == "Percakapan Baru":
-                    try:
-                        res_title = model.generate_content(f"Berikan judul maksimal 3 kata untuk: {prompt}")
-                        new_title = res_title.text.strip()
-                        c.execute("UPDATE sessions SET title = ? WHERE id = ?", (new_title, st.session_state.current_session_id))
-                    except:
-                        pass
-                
-                # Simpan jawaban ke DB
-                c.execute("INSERT INTO messages (session_id, role, content) VALUES (?, ?, ?)", 
-                          (st.session_state.current_session_id, "assistant", answer))
-                conn.commit()
-                
-                st.markdown(answer)
-                st.rerun() # Refresh untuk update sidebar dan tombol audio
-                
-            except Exception as e:
-                st.error(f"Maaf, ada gangguan koneksi: {str(e)}")
+    if st.button("Mulai Lagi?"):
+        st.session_state.step = 0
+        st.rerun()
