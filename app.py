@@ -15,23 +15,18 @@ st.markdown("""
         font-family: 'Comic Sans MS', cursive; 
     }
     
-    /* TRIK TOMBOL TRANSPARAN DI ATAS GAMBAR */
-    div.stButton > button {
+    /* TOMBOL TRANSPARAN DI ATAS GAMBAR PESAWAT */
+    div.stButton > button:first-child {
         background-color: transparent !important;
         color: transparent !important;
         border: none !important;
         width: 100%;
-        height: 250px; /* Menyesuaikan tinggi gambar pesawat */
-        position: absolute;
-        top: -260px; /* Menggeser tombol tepat ke atas gambar */
+        height: 250px; 
+        position: relative;
         z-index: 999;
         cursor: pointer;
     }
     
-    div.stButton > button:hover {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-
     .letter-box {
         background-color: white;
         padding: 30px;
@@ -39,18 +34,27 @@ st.markdown("""
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         border-left: 8px solid #F06292;
         line-height: 1.6;
-        margin-bottom: 20px;
+        margin-bottom: 30px; /* Jarak bawah agar tombol tutup tidak nempel */
     }
 
-    /* CSS Tambahan untuk tombol tutup agar tetap di bawah dan terlihat */
-    .footer-button div.stButton > button {
-        position: static !important;
+    /* GAYA KHUSUS TOMBOL TUTUP AGAR DI BAWAH & TERLIHAT */
+    .tombol-tutup-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 20px;
+        clear: both;
+    }
+
+    .tombol-tutup-container div.stButton > button {
         background-color: #F06292 !important;
         color: white !important;
-        border-radius: 10px !important;
+        position: static !important;
         height: auto !important;
-        padding: 10px 20px !important;
-        top: 0 !important;
+        width: auto !important;
+        padding: 10px 30px !important;
+        border-radius: 10px !important;
+        border: none !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -59,7 +63,7 @@ st.markdown("""
 if 'terbuka' not in st.session_state:
     st.session_state.terbuka = False
 
-# --- TAMPILAN 1: PESAWAT (Klik Gambar untuk Buka) ---
+# --- TAMPILAN 1: PESAWAT ---
 if not st.session_state.terbuka:
     st.markdown("<br><br><br>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align:center;'>Ada pesan special untukmu...</h2>", unsafe_allow_html=True)
@@ -72,14 +76,13 @@ if not st.session_state.terbuka:
         else:
             st.markdown("<h1 style='text-align:center; font-size:100px;'>✈️</h1>", unsafe_allow_html=True)
 
-        # Tombol transparan menutupi area gambar
         if st.button("BUKA"):
             st.session_state.terbuka = True
             st.rerun()
 
 # --- TAMPILAN 2: SURAT & YOUTUBE MUSIC ---
 else:
-    # YouTube Music Embed (Pilihanku - Maliq & D'Essentials)
+    # YouTube Music Embed
     st.markdown("""
         <iframe width="100%" height="180" src="https://www.youtube.com/embed/Q1-pK_UelkA?autoplay=1" 
         title="YouTube video player" frameborder="0" 
@@ -92,7 +95,7 @@ else:
     
     st.markdown("<h1 style='text-align:center;'>Happy Valentine's Day Sayang!! 💖</h1>", unsafe_allow_html=True)
     
-    # Kotak Surat
+    # KOTAK SURAT (Tanpa tombol di dalamnya)
     st.markdown("""
     <div class="letter-box">
         <h3 style="margin-top:0;">Haloo my handsome, my love, my world! 🪐✨🤍</h3>
@@ -108,13 +111,13 @@ else:
             Aku harap cinta kita selalu bertumbuh setiap harinya, dan rasa sayang ini 
             nggak akan pernah habis...
         </p>
-        <p style="text-align: right; font-weight: bold; font-size: 1.2em;">- Sayangmu ❤️</p>
+        <p style="text-align: right; font-weight: bold; font-size: 1.2em; margin-bottom:0;">- Sayangmu ❤️</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Tombol Tutup diletakkan di bawah (menggunakan container khusus agar tidak transparan)
-    st.markdown('<div class="footer-button">', unsafe_allow_html=True)
-    if st.button("Tutup Pesan 📩", key="tutup"):
+    # TOMBOL TUTUP BENAR-BENAR DI BAWAH (Di luar kolom/box)
+    st.markdown('<div class="tombol-tutup-container">', unsafe_allow_html=True)
+    if st.button("Tutup Pesan 📩", key="btn_tutup"):
         st.session_state.terbuka = False
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
