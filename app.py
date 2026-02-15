@@ -4,61 +4,77 @@ import os
 # 1. SETTING HALAMAN
 st.set_page_config(page_title="Pesan Untukmu 💌", page_icon="💖", layout="centered")
 
-# 2. CSS UNTUK TEKS HITAM DAN TAMPILAN
+# 2. CUSTOM CSS (Tombol Transparan & Teks Hitam)
 st.markdown("""
     <style>
     .stApp { background-color: #FCE4EC; }
     
-    /* Memastikan semua teks berwarna hitam pekat */
-    h1, h2, h3, p, div { color: #000000 !important; font-family: 'Comic Sans MS', cursive; }
-    
-    .letter-box {
-        background-color: white;
-        padding: 25px;
-        border-radius: 20px;
-        border-left: 10px solid #F06292;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        margin-top: 20px;
+    /* Membuat teks hitam pekat agar jelas */
+    h1, h2, h3, p, span, div { 
+        color: #000000 !important; 
+        font-family: 'Comic Sans MS', cursive; 
     }
     
-    /* Gaya tombol transparan untuk gambar pesawat */
-    .image-button {
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
+    /* TRIK TOMBOL TRANSPARAN DI ATAS GAMBAR */
+    div.stButton > button {
+        background-color: transparent !important;
+        color: transparent !important;
+        border: none !important;
         width: 100%;
+        height: 250px; /* Menyesuaikan tinggi gambar pesawat */
+        position: absolute;
+        top: -260px; /* Menggeser tombol tepat ke atas gambar */
+        z-index: 999;
+        cursor: pointer;
+    }
+    
+    div.stButton > button:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .letter-box {
+        background-color: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        border-left: 8px solid #F06292;
+        line-height: 1.6;
     }
     </style>
     """, unsafe_allow_html=True)
 
 # 3. LOGIKA HALAMAN
-if 'status' not in st.session_state:
-    st.session_state.status = 'awal'
+if 'terbuka' not in st.session_state:
+    st.session_state.terbuka = False
 
-# --- TAMPILAN 1: PESAWAT SEBAGAI TOMBOL ---
-if st.session_state.status == 'awal':
-    st.markdown("<br><br><h2 style='text-align:center;'>Ada pesan special untukmu...</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center;'>Tap pesawat di bawah untuk terbang ke suratnya ✨</p>", unsafe_allow_html=True)
+# --- TAMPILAN 1: PESAWAT (Klik Gambar untuk Buka) ---
+if not st.session_state.terbuka:
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align:center;'>Ada pesan special untukmu...</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center;'>Klik pada pesawat untuk membukanya ✨</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([0.2, 1, 0.2])
     with col2:
-        # Menampilkan gambar pesawat
         if os.path.exists("pesawat.png"):
             st.image("pesawat.png", use_container_width=True)
         else:
             st.markdown("<h1 style='text-align:center; font-size:100px;'>✈️</h1>", unsafe_allow_html=True)
-            
-        # TOMBOL MENUJU SURAT (Letakkan tepat di bawah gambar)
-        if st.button("BUKA SURAT SEKARANG ✈️", use_container_width=True):
-            st.session_state.status = 'surat'
+
+        # Tombol ini sekarang transparan dan menutupi area gambar
+        if st.button("BUKA"):
+            st.session_state.terbuka = True
             st.rerun()
 
-# --- TAMPILAN 2: SURAT & MUSIK ---
+# --- TAMPILAN 2: SURAT & YOUTUBE MUSIC ---
 else:
-    # MUSIK: Menggunakan audio player standar agar user bisa "Play" jika autoplay gagal
-    st.write("🎵 Musik: Maliq & D'Essentials - Pilihanku")
-    st.audio("https://raw.githubusercontent.com/arifianadit/temp-files/main/pilihanku.mp3", format="audio/mp3", autoplay=True)
+    # YouTube Music Embed (Pilihanku - Maliq & D'Essentials)
+    st.markdown("""
+        <iframe width="100%" height="180" src="https://www.youtube.com/embed/Q1-pK_UelkA?autoplay=1" 
+        title="YouTube video player" frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen></iframe>
+        <p style='text-align:center; font-size: 12px;'>Klik tombol Play di atas jika lagu tidak otomatis berputar 🎵</p>
+    """, unsafe_allow_html=True)
     
     st.balloons()
     
@@ -83,7 +99,6 @@ else:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("Mulai Lagi? 🔄"):
-        st.session_state.status = 'awal'
+    if st.button("Tutup Pesan 📩", key="tutup"):
+        st.session_state.terbuka = False
         st.rerun()
