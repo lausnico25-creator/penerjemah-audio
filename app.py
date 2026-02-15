@@ -109,6 +109,8 @@ else:
         <p>
             Jangan bosen bosen yah, tetap sabar menghadapi kelakuanku yang mungkin ngeselin hehe. wopyuu🤍🤍
         </p>
+        <p>
+            Buat hadiah Valentine nya menyusul yahhh😅🫣MAAF TELATSSSSS🙏
         <p style="text-align: right; font-weight: bold; font-size: 1.2em; margin-bottom:0;">- Sayangmu, Niko🤍</p>
     </div>
     """, unsafe_allow_html=True)
