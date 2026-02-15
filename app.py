@@ -4,41 +4,42 @@ import os
 # 1. SETTING HALAMAN
 st.set_page_config(page_title="Pesan Untukmu 💌", page_icon="💖", layout="centered")
 
-# 2. CUSTOM CSS (Tombol Transparan & Teks Hitam)
+# 2. CUSTOM CSS (Teks Hitam, Tombol Transparan, & Sembunyikan Player)
 st.markdown("""
     <style>
     .stApp { background-color: #FCE4EC; }
     
-    /* Membuat teks hitam pekat agar jelas */
-    h1, h2, h3, p, span, div { 
+    /* Paksa semua teks jadi hitam agar sangat jelas */
+    h1, h2, h3, p, span, div, li { 
         color: #000000 !important; 
         font-family: 'Comic Sans MS', cursive; 
     }
     
-    /* TRIK TOMBOL TRANSPARAN DI ATAS GAMBAR */
+    /* Membuat tombol transparan menutupi gambar pesawat */
     div.stButton > button {
         background-color: transparent !important;
         color: transparent !important;
         border: none !important;
         width: 100%;
-        height: 250px; /* Menyesuaikan tinggi gambar pesawat */
-        position: absolute;
-        top: -260px; /* Menggeser tombol tepat ke atas gambar */
-        z-index: 999;
+        height: 300px; /* Sesuaikan dengan tinggi gambar */
+        position: relative;
+        z-index: 10;
         cursor: pointer;
     }
     
-    div.stButton > button:hover {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-
+    /* Kotak Surat */
     .letter-box {
         background-color: white;
         padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        border-left: 8px solid #F06292;
-        line-height: 1.6;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-left: 10px solid #F06292;
+        margin-top: -50px; /* Biar mepet ke atas */
+    }
+
+    /* Menyembunyikan pemutar musik agar tidak ada pop-up */
+    .hidden-audio {
+        display: none;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -47,33 +48,32 @@ st.markdown("""
 if 'terbuka' not in st.session_state:
     st.session_state.terbuka = False
 
-# --- TAMPILAN 1: PESAWAT (Klik Gambar untuk Buka) ---
+# --- TAMPILAN 1: PESAWAT (Klik Gambar Langsung) ---
 if not st.session_state.terbuka:
     st.markdown("<br><br><br>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align:center;'>Ada pesan special untukmu...</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align:center;'>Klik pada pesawat untuk membukanya ✨</p>", unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns([0.2, 1, 0.2])
+    col1, col2, col3 = st.columns([0.1, 1, 0.1])
     with col2:
+        # Menampilkan gambar pesawat
         if os.path.exists("pesawat.png"):
             st.image("pesawat.png", use_container_width=True)
         else:
             st.markdown("<h1 style='text-align:center; font-size:100px;'>✈️</h1>", unsafe_allow_html=True)
 
-        # Tombol ini sekarang transparan dan menutupi area gambar
+        # Tombol transparan diletakkan di bawah gambar (dengan margin negatif di CSS akan menutupi gambar)
         if st.button("BUKA"):
             st.session_state.terbuka = True
             st.rerun()
 
-# --- TAMPILAN 2: SURAT & YOUTUBE MUSIC ---
+# --- TAMPILAN 2: SURAT & MUSIK TERSEMBUNYI ---
 else:
-    # YouTube Music Embed (Pilihanku - Maliq & D'Essentials)
+    # MUSIK TERSEMBUNYI (Maliq & D'Essentials - Pilihanku)
+    # Kita pasang dengan ukuran 1x1 agar tidak terlihat di layar
     st.markdown("""
-        <iframe width="100%" height="180" src="https://www.youtube.com/embed/Q1-pK_UelkA?autoplay=1" 
-        title="YouTube video player" frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-        allowfullscreen></iframe>
-        <p style='text-align:center; font-size: 12px;'>Klik tombol Play di atas jika lagu tidak otomatis berputar 🎵</p>
+        <iframe class="hidden-audio" src="https://open.spotify.com/embed/track/4vXp9V9DskX98G8mR36q2G?autoplay=1" 
+        width="1" height="1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
     """, unsafe_allow_html=True)
     
     st.balloons()
@@ -99,6 +99,8 @@ else:
     </div>
     """, unsafe_allow_html=True)
     
+    # Tombol tutup tetap di bawah
+    st.markdown("<br>", unsafe_allow_html=True)
     if st.button("Tutup Pesan 📩", key="tutup"):
         st.session_state.terbuka = False
         st.rerun()
